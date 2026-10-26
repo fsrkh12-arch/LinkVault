@@ -65,6 +65,10 @@ This repository includes a `Procfile` for Koyeb. Create a GitHub-based Web Servi
 
 Koyeb provides the `PORT` automatically. The free tier is suitable for displaying this project, but the local SQLite database is not a permanent production database, so do not use it for important data.
 
+## Render display deployment
+
+`render.yaml` can create the Flask web service using the free plan. Render generates the session secret automatically. This is for displaying the app: its free web service can restart and local SQLite data is not permanent.
+
 Why I built this
 
 This project helped me understand how Flask routes work, how user authentication is handled, how to store and retrieve data with SQLite, and how the frontend and backend connect.

@@ -48,11 +48,15 @@ def create_tables():
             title TEXT NOT NULL,
             url TEXT NOT NULL,
             tag TEXT,
+            is_favorite INTEGER NOT NULL DEFAULT 0,
             user_id INTEGER NOT NULL,
             created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );
     """)
+    columns = [row[1] for row in db.execute("PRAGMA table_info(links)").fetchall()]
+    if "is_favorite" not in columns:
+        db.execute("ALTER TABLE links ADD COLUMN is_favorite INTEGER NOT NULL DEFAULT 0")
     db.commit()
 
 
@@ -123,14 +127,18 @@ def dashboard():
     if tag:
         query += " AND tag = ?"
         values.append(tag)
-    query += " ORDER BY created_at DESC, id DESC"
+    query += " ORDER BY is_favorite DESC, created_at DESC, id DESC"
 
     links = db.execute(query, values).fetchall()
     tags = db.execute(
         "SELECT DISTINCT tag FROM links WHERE user_id = ? AND tag IS NOT NULL ORDER BY tag",
         (session["user_id"],),
     ).fetchall()
-    return render_template("dashboard.html", links=links, tags=tags, search=search, selected_tag=tag)
+    stats = db.execute(
+        "SELECT COUNT(*) AS total, COALESCE(SUM(is_favorite), 0) AS favorites, COUNT(DISTINCT tag) AS tags FROM links WHERE user_id = ?",
+        (session["user_id"],),
+    ).fetchone()
+    return render_template("dashboard.html", links=links, tags=tags, search=search, selected_tag=tag, stats=stats)
 
 
 @app.post("/delete/<int:link_id>")
@@ -143,6 +151,21 @@ def delete_link(link_id):
     db.execute("DELETE FROM links WHERE id = ? AND user_id = ?", (link_id, session["user_id"]))
     db.commit()
     flash("Link deleted.")
+    return redirect(url_for("dashboard"))
+
+
+@app.post("/favorite/<int:link_id>")
+@login_required
+def toggle_favorite(link_id):
+    if not valid_csrf():
+        flash("Please try again.")
+        return redirect(url_for("dashboard"))
+    db = get_db()
+    db.execute(
+        "UPDATE links SET is_favorite = CASE is_favorite WHEN 1 THEN 0 ELSE 1 END WHERE id = ? AND user_id = ?",
+        (link_id, session["user_id"]),
+    )
+    db.commit()
     return redirect(url_for("dashboard"))
 
 

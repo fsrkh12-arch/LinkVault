@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Create account · LinkVault{% endblock %}
 {% block content %}
-  <h1>Create account</h1><p class="subtext">Start saving your useful links.</p>
+  <div class="auth-brand"><span>✨</span><div><h1>Make it yours</h1><p class="subtext">A calmer home for your favourite corners of the web.</p></div></div>
   <form method="post" class="stacked">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <label>Username<input name="username" required minlength="3" maxlength="40" autocomplete="username"></label>
     <label>Password<input name="password" type="password" required minlength="8" autocomplete="new-password"></label>
     <label>Confirm password<input name="confirmation" type="password" required minlength="8" autocomplete="new-password"></label>
-    <button>Create account</button>
+    <button>Create my vault →</button>
   </form>
-  <p class="center">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+  <p class="center">Already have a vault? <a href="{{ url_for('login') }}">Log in</a></p>
 {% endblock %}

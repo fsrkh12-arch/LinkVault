@@ -1,4 +1,4 @@
-LinkVault
+# LinkVault
 
 LinkVault is a small web app I built to save and manage bookmarks. Instead of keeping links all over the place, this lets you store them in one spot and access them after logging in.
 
@@ -48,7 +48,7 @@ How to run it
 3. Open your browser and go to:
    http://127.0.0.1:5000
 
-The database file will be created automatically the first time you run the app.
+The database file will be created automatically the first time you run the app. For a real deployment, set a long random `SECRET_KEY` environment variable before running Flask.
 
 Why I built this
 
@@ -58,7 +58,5 @@ It’s not meant to be fancy. It’s meant to be clear and easy to understand.
 
 Possible improvements
 
-- Add categories or tags
-- Add search and filtering
-- Add priority levels
+- Tags, search, and filtering are included.
 - Deploy it online

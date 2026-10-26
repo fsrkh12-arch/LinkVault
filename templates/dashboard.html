@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}My links · LinkVault{% endblock %}
+{% block content %}
+  <header><div><h1>LinkVault</h1><p class="subtext">Save the links worth keeping.</p></div><form action="{{ url_for('logout') }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="quiet">Log out</button></form></header>
+  <form method="post" class="add-link">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input name="title" required maxlength="100" placeholder="Link title">
+    <input name="url" type="url" required placeholder="https://example.com">
+    <input name="tag" maxlength="30" placeholder="Tag (optional)">
+    <button>Save link</button>
+  </form>
+  <form method="get" class="filters"><input name="search" value="{{ search }}" placeholder="Search links"><select name="tag"><option value="">All tags</option>{% for row in tags %}<option value="{{ row.tag }}" {% if selected_tag == row.tag %}selected{% endif %}>{{ row.tag }}</option>{% endfor %}</select><button class="quiet">Filter</button></form>
+  <section class="links"><h2>Saved links</h2>{% for link in links %}<article><div><a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title }}</a><p>{{ link.url }}</p>{% if link.tag %}<span>{{ link.tag }}</span>{% endif %}</div><form action="{{ url_for('delete_link', link_id=link.id) }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="delete">Delete</button></form></article>{% else %}<p class="empty">No links found. Save your first one above.</p>{% endfor %}</section>
+{% endblock %}

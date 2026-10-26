@@ -2,6 +2,12 @@
 
 LinkVault is a small web app I built to save and manage bookmarks. Instead of keeping links all over the place, this lets you store them in one spot and access them after logging in.
 
+## Live display demo
+
+[Open the LinkVault display demo](https://fsrkh12-arch.github.io/LinkVault/)
+
+The GitHub Pages version is a browser-only display demo. The Flask app in this repository is the secure version with accounts and SQLite data.
+
 The goal of this project was to practice Flask, databases, and basic full-stack concepts without using heavy frameworks.
 
 What it does

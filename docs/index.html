@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LinkVault</title>
+  <style>
+    :root{--ink:#26332c;--green:#526a58;--soft:#eff2eb;--line:#dce2d8}*{box-sizing:border-box}body{margin:0;background:#f6f5ef;color:var(--ink);font-family:Arial,sans-serif;padding:24px}.card{background:#fff;width:min(760px,100%);margin:auto;padding:30px;border-radius:14px;box-shadow:0 12px 30px #1f29211a}header{display:flex;justify-content:space-between;gap:14px;align-items:start;border-bottom:1px solid var(--line);padding-bottom:18px}h1,h2,p{margin-top:0}h1{margin-bottom:5px}.subtext,.note{color:#6d756d}.badge{background:var(--soft);padding:7px 10px;border-radius:99px;font-size:12px}.add-link{display:grid;grid-template-columns:1fr 1.2fr .7fr auto;gap:8px;margin:20px 0}input,select{border:1px solid var(--line);border-radius:7px;padding:11px;font:inherit;width:100%;background:#fff}button{background:var(--green);border:0;border-radius:7px;color:#fff;padding:11px 14px;font:inherit;cursor:pointer}.filters{display:flex;gap:8px;border-bottom:1px solid var(--line);padding-bottom:18px}.filters input{flex:1}.filters select{width:150px}.links h2{font-size:19px;margin:20px 0 10px}.links article{display:flex;justify-content:space-between;gap:15px;padding:14px 0;border-bottom:1px solid var(--line)}a{color:#315e43;font-weight:bold;text-decoration:none}.links article p{color:#747b74;font-size:13px;margin:6px 0;overflow-wrap:anywhere}.links span{background:var(--soft);padding:4px 8px;border-radius:99px;font-size:12px}.delete{background:#a55252;padding:8px 10px}.empty{color:#747b74;padding:14px 0}@media(max-width:620px){body{padding:12px}.card{padding:22px}.add-link{grid-template-columns:1fr}.filters{flex-wrap:wrap}.filters select{width:auto;flex:1}}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <header><div><h1>LinkVault</h1><p class="subtext">Save the links worth keeping.</p></div><span class="badge">Browser demo</span></header>
+    <form id="addLink" class="add-link"><input id="title" required maxlength="100" placeholder="Link title"><input id="url" type="url" required placeholder="https://example.com"><input id="tag" maxlength="30" placeholder="Tag"><button>Save link</button></form>
+    <form id="filters" class="filters"><input id="search" placeholder="Search links"><select id="tagFilter"><option value="">All tags</option></select></form>
+    <section class="links"><h2>Saved links</h2><div id="links"></div></section>
+    <p class="note">Display version: links stay only in this browser. The secure Flask app, with accounts and protected data, is in the GitHub repository.</p>
+  </main>
+  <script>
+    const storageKey='linkvault-display-v1',linksArea=document.querySelector('#links'),tagFilter=document.querySelector('#tagFilter');
+    let links=JSON.parse(localStorage.getItem(storageKey)||'[]');
+    const safe=value=>value.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const save=()=>localStorage.setItem(storageKey,JSON.stringify(links));
+    function updateTags(){const selected=tagFilter.value,tags=[...new Set(links.map(link=>link.tag).filter(Boolean))].sort();tagFilter.innerHTML='<option value="">All tags</option>'+tags.map(tag=>'<option '+(tag===selected?'selected':'')+'>'+safe(tag)+'</option>').join('')}
+    function render(){const search=document.querySelector('#search').value.toLowerCase(),tag=tagFilter.value;const shown=links.filter(link=>(!tag||link.tag===tag)&&[link.title,link.url,link.tag].join(' ').toLowerCase().includes(search));linksArea.innerHTML=shown.length?shown.map(link=>'<article><div><a href="'+safe(link.url)+'" target="_blank" rel="noopener noreferrer">'+safe(link.title)+'</a><p>'+safe(link.url)+'</p>'+(link.tag?'<span>'+safe(link.tag)+'</span>':'')+'</div><button class="delete" data-id="'+link.id+'">Delete</button></article>').join(''):'<p class="empty">No links found. Save your first one above.</p>';document.querySelectorAll('.delete').forEach(button=>button.onclick=()=>{links=links.filter(link=>link.id!==button.dataset.id);save();updateTags();render()})}
+    document.querySelector('#addLink').onsubmit=event=>{event.preventDefault();const linkUrl=document.querySelector('#url').value.trim();try{const parsed=new URL(linkUrl);if(!['http:','https:'].includes(parsed.protocol))throw new Error()}catch{alert('Use a complete http:// or https:// link.');return}links.unshift({id:String(Date.now()),title:document.querySelector('#title').value.trim(),url:linkUrl,tag:document.querySelector('#tag').value.trim()});event.currentTarget.reset();save();updateTags();render()};document.querySelector('#filters').oninput=render;updateTags();render();
+  </script>
+</body>
+</html>

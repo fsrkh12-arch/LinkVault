@@ -6,7 +6,7 @@ LinkVault is a small web app I built to save and manage bookmarks. Instead of ke
 
 [Open the LinkVault display demo](https://fsrkh12-arch.github.io/LinkVault/)
 
-The GitHub Pages version is a browser-only display demo. The Flask app in this repository is the secure version with accounts and SQLite data.
+The GitHub Pages version is a browser-only display demo. The Flask app in this repository is the secure version with accounts and SQLite data. The Pages demo deploys automatically whenever this repository is updated.
 
 The goal of this project was to practice Flask, databases, and basic full-stack concepts without using heavy frameworks.
 

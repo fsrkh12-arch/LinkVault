@@ -50,6 +50,15 @@ How to run it
 
 The database file will be created automatically the first time you run the app. For a real deployment, set a long random `SECRET_KEY` environment variable before running Flask.
 
+## Deploy on Koyeb
+
+This repository includes a `Procfile` for Koyeb. Create a GitHub-based Web Service, choose the buildpack option, and add these environment variables in Koyeb:
+
+- `SECRET_KEY`: a long, random value kept private
+- `COOKIE_SECURE`: `true`
+
+Koyeb provides the `PORT` automatically. The free tier is suitable for displaying this project, but the local SQLite database is not a permanent production database, so do not use it for important data.
+
 Why I built this
 
 This project helped me understand how Flask routes work, how user authentication is handled, how to store and retrieve data with SQLite, and how the frontend and backend connect.

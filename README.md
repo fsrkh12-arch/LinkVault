@@ -1,6 +1,6 @@
 # LinkVault
 
-LinkVault is a small bookmark manager built to explore Flask, authentication, and database-backed web applications. It keeps a user's links together and makes them easier to find later.
+I created LinkVault on my own as a personal tool to keep my bookmarks private and easy to access in one place. The project also gave me a way to explore Flask, authentication, and database-backed web applications.
 
 ## Try it
 

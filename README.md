@@ -1,85 +1,31 @@
 # LinkVault
 
-LinkVault is a small web app I built to save and manage bookmarks. Instead of keeping links all over the place, this lets you store them in one spot and access them after logging in.
+LinkVault is a small bookmark manager built to explore Flask, authentication, and database-backed web applications. It keeps a user's links together and makes them easier to find later.
 
-## Open LinkVault
+## Try it
 
-[Open the live Flask app](https://linkvault-8u34.onrender.com)
+- [Open the Flask app](https://linkvault-8u34.onrender.com/) — create an account to try the full application. The free service may take a while to wake up, and its SQLite data is not permanent.
+- [Open the browser demo](https://fsrkh12-arch.github.io/LinkVault/) — a separate display version that keeps links in the current browser and does not use Flask accounts.
 
-Create an account, then save, tag, search, favourite, and delete your own links. The free Render service can take a short moment to wake after inactivity.
+## Features
 
-[Open the GitHub Pages display demo](https://fsrkh12-arch.github.io/LinkVault/)
+- Register and sign in; passwords are stored as hashes.
+- Save links with titles and optional tags, search and filter them, mark favorites, and delete them.
+- Keep each account's links separate. Forms use CSRF tokens and saved URLs are restricted to HTTP and HTTPS.
 
-The Pages version is a browser-only display demo. The live Render link above is the actual Flask application with accounts and SQLite data.
+## Run locally
 
-The goal of this project was to practice Flask, databases, and basic full-stack concepts without using heavy frameworks.
+Requires Python. From the repository directory:
 
-What it does
+```sh
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+flask --app app run
+```
 
-- Lets users sign up and log in
-- Passwords are hashed (not stored as plain text)
-- Users can add links with a title and URL
-- Saved links are shown on a simple dashboard
-- Links can be deleted
-- Data is saved using SQLite
+Open the address printed by Flask. The app creates `database.db` automatically. For a deployment, provide a private, random `SECRET_KEY` and set `COOKIE_SECURE=true` when using HTTPS. SQLite on the included free hosting configuration is intended for demonstration, not durable storage of important data.
 
-Tools used
+## Built with
 
-- Python
-- Flask
-- HTML and CSS
-- SQLite
-- Werkzeug for password hashing
-
-Everything is kept simple on purpose. No React, no external services.
-
-Folder structure
-
-linkvault/
-- app.py
-- database.db (created automatically)
-- templates/
-  - login.html
-  - register.html
-  - dashboard.html
-- static/
-  - style.css
-- .gitignore
-- README.txt
-
-How to run it
-
-1. Install the dependencies:
-   pip install flask werkzeug
-
-2. Run the app:
-   python app.py
-
-3. Open your browser and go to:
-   http://127.0.0.1:5000
-
-The database file will be created automatically the first time you run the app. For a real deployment, set a long random `SECRET_KEY` environment variable before running Flask.
-
-## Deploy on Koyeb
-
-This repository includes a `Procfile` for Koyeb. Create a GitHub-based Web Service, choose the buildpack option, and add these environment variables in Koyeb:
-
-- `SECRET_KEY`: a long, random value kept private
-- `COOKIE_SECURE`: `true`
-
-Koyeb provides the `PORT` automatically. The free tier is suitable for displaying this project, but the local SQLite database is not a permanent production database, so do not use it for important data.
-
-## Render display deployment
-
-`render.yaml` can create the Flask web service using the free plan. Render generates the session secret automatically. This is for displaying the app: its free web service can restart and local SQLite data is not permanent.
-
-Why I built this
-
-This project helped me understand how Flask routes work, how user authentication is handled, how to store and retrieve data with SQLite, and how the frontend and backend connect.
-
-It’s not meant to be fancy. It’s meant to be clear and easy to understand.
-
-Possible improvements
-
-- Tags, search, and filtering are included.
-- Deploy it online
+Python, Flask, SQLite, Jinja templates, HTML, CSS, and Werkzeug. `render.yaml` and `Procfile` provide deployment configuration.
